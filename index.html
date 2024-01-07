@@ -308,6 +308,45 @@
         function handleKeyPress(event) {
             // Handle any additional key presses if needed
         }
+        // Add touch controls
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+function handleTouchStart(event) {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+}
+function handleTouchMove(event) {
+    if (!touchStartX || !touchStartY) return;
+
+    const touchEndX = event.touches[0].clientX;
+    const touchEndY = event.touches[0].clientY;
+
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Horizontal swipe
+        if (deltaX > 0) {
+            direction = 'right';
+        } else {
+            direction = 'left';
+        }
+    } else {
+        // Vertical swipe
+        if (deltaY > 0) {
+            direction = 'down';
+        } else {
+            direction = 'up';
+        }
+    }
+
+    touchStartX = 0;
+    touchStartY = 0;
+}
     </script>
 </body>
 </html>
