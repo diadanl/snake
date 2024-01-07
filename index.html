@@ -89,21 +89,51 @@
             border: none;
             border-radius: 4px;
         }
+
+        /* Starting Screen Styles */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: #61dafb;
+        }
+
+        #begin-button {
+            background-color: #61dafb;
+            color: #282c34;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
     </style>
-    <title>Styled Snake Game</title>
+    <title>HTML Snake</title>
 </head>
 <body>
-    <h1>Styled Snake Game</h1>
-    <div id="game-info">
-        <p>Score: <span id="score">0</span></p>
+    <!-- Starting Screen -->
+    <div id="start-screen">
+        <h1>Welcome to HTML Snake</h1>
+        <button id="begin-button" onclick="startGame()">Begin</button>
     </div>
-    <div id="game-container"></div>
 
-    <!-- Game Over Modal -->
-    <div id="game-over-modal">
-        <div id="game-over-content">
-            <p id="game-over-message">Game Over!</p>
-            <button id="restart-button" onclick="resetGame()">Restart Game</button>
+    <!-- Game Screen -->
+    <div id="game-screen" style="display: none;">
+        <h1>HTML Snake</h1>
+        <div id="game-info">
+            <p>Score: <span id="score">0</span></p>
+        </div>
+        <div id="game-container"></div>
+
+        <!-- Game Over Modal -->
+        <div id="game-over-modal" style="display: none;">
+            <div id="game-over-content">
+                <p id="game-over-message">Game Over!</p>
+                <button id="restart-button" onclick="resetGame()">Restart Game</button>
+            </div>
         </div>
     </div>
 
@@ -114,9 +144,35 @@
         let food = { x: 5, y: 5 };
         let score = 0;
 
+        document.addEventListener('keydown', function(event) {
+            const startScreen = document.getElementById('start-screen');
+            const isStartScreenVisible = getComputedStyle(startScreen).display === 'flex';
+
+            if (isStartScreenVisible && (event.key === ' ' || event.keyCode === 32)) {
+                startGame();
+            } else {
+                handleKeyPress(event);
+            }
+        });
+
         function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            initializeGame();
+        }
+
+        function initializeGame() {
             setInterval(updateGame, 100);
-            document.addEventListener('keydown', changeDirection);
+            document.addEventListener('keydown', function(event) {
+                const gameOverModal = document.getElementById('game-over-modal');
+                const isGameOverModalVisible = getComputedStyle(gameOverModal).display === 'flex';
+
+                if (isGameOverModalVisible && (event.key === ' ' || event.keyCode === 32)) {
+                    resetGame();
+                } else {
+                    changeDirection(event);
+                }
+            });
         }
 
         function updateGame() {
@@ -248,21 +304,10 @@
             const gameOverModal = document.getElementById('game-over-modal');
             gameOverModal.style.display = 'none';
         }
-		
-		    document.addEventListener('keydown', function(event) {
-        // Check if the game over modal is displayed
-        const gameOverModal = document.getElementById('game-over-modal');
-        const isGameOverModalVisible = getComputedStyle(gameOverModal).display === 'flex';
 
-        // Check for spacebar key (keyCode 32) and trigger resetGame only in the game over modal
-        if (isGameOverModalVisible && (event.key === ' ' || event.keyCode === 32)) {
-            resetGame();
-        } else {
-            changeDirection(event);
+        function handleKeyPress(event) {
+            // Handle any additional key presses if needed
         }
-    });
-
-        startGame();
     </script>
 </body>
 </html>
