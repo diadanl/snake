@@ -17,9 +17,7 @@
             background-color: #282c34;
             color: #61dafb;
         }
-footer {
-    margin-top: 60px !important; /* Adjust as needed */
-  }
+
         #game-info {
             margin-bottom: 20px;
         }
